@@ -13,29 +13,29 @@ O objetivo deste projeto é desenvolver uma aplicação capaz de realizar simula
 
 ## Requisitos funcionais 
 
-# Leitura e Processamento de Dados Históricos
+### Leitura e Processamento de Dados Históricos
 A aplicação deve ser capaz de importar e processar dados históricos da cotação real-dólar de uma fonte confiável, como bancos centrais ou serviços de dados financeiros. Esses dados devem ser limpos e estruturados para uso em simulações.
 
-# Entrada de Parâmetros
+### Entrada de Parâmetros
 A interface da aplicação deve permitir que o usuário insira os parâmetros de cotação-alvo, período de tempo e número de simulações
 
-# Simulação de Monte Carlo
+### Simulação de Monte Carlo
 A aplicação deve realizar simulações de Monte Carlo utilizando os dados históricos processados, modelando variações futuras na cotação real-dólar com base nos parâmetros inseridos pelo usuário.
 
-# Cálculo de Probabilidades
+### Cálculo de Probabilidades
 Após a execução das simulações, a aplicação deve calcular a probabilidade de a cotação-alvo ser atingida no período de tempo especificado. Os resultados devem ser apresentados de forma clara e detalhada, permitindo fácil interpretação pelo usuário.
 
-# Registro de resultados em banco
+### Registro de resultados em banco
 A aplicação deve ser capaz de gerar um registro em banco de cada execução, armazenando os principais resultados como probabilidade de alcançar a cotação-alvo, erro-média, intervalo de confiança.
 
 
 ## Requisitos não-funcionais 
 
-# Performance
+### Performance
 A aplicação deve ser otimizada para processar grandes volumes de dados e executar simulações em tempo hábil, proporcionando uma experiência fluida para o usuário.
-# Usabilidade
+### Usabilidade
 A interface do usuário deve ser intuitiva e acessível, com instruções claras e feedback em tempo real, garantindo que usuários com diferentes níveis de expertise técnica possam utilizar a aplicação eficientemente.
-# Confiabilidade
+### Confiabilidade
 A aplicação deve garantir a precisão e consistência dos resultados através de validações de dados e métodos estatísticos robustos.
 
 
