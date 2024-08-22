@@ -14,8 +14,6 @@ def retornar_cotacao(db: DBConnection, data_inicio: str, data_fim: str) -> pd.Da
     WHERE dt_cotacao BETWEEN '%s' AND '%s' ORDER BY 2;
     """ % (data_inicio, data_fim)
 
-    print(query)
-
     with db.connection() as conn:
         df = pd.read_sql(sql=query, con=conn)
 
