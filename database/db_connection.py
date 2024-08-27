@@ -99,8 +99,10 @@ class DBConnection:
     def query(self, sql_query: str):
         with self.connection() as connect:
             try:
+                print(sql_query)
                 cursor = connect.cursor()
                 cursor.execute(sql_query)
+                connect.commit()
                 query_result = cursor.fetchall()
                 cursor.close()
                 return query_result

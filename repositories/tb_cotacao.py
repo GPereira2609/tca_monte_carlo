@@ -18,3 +18,17 @@ def retornar_cotacao(db: DBConnection, data_inicio: str, data_fim: str) -> pd.Da
         df = pd.read_sql(sql=query, con=conn)
 
     return df
+
+def retornar_datas_limite(db: DBConnection) -> (str, str):
+    """
+    Retorna maior e menor datas de cotação
+    """
+
+    query = f"""
+    SELECT MAX(dt_cotacao), MIN(dt_cotacao) from tb_cotacao
+    """
+
+    with db.connection() as conn:
+        df = pd.read_sql(sql=query, con=conn)
+
+    return df
