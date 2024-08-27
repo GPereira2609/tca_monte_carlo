@@ -3,9 +3,10 @@ from database.db_connection import DBConnection
 from repositories.tb_cotacao import retornar_cotacao, retornar_datas_limite
 from repositories.tb_consulta import registrar_consulta
 from config.settings import DB_NAME, USER, PASSWORD, HOST, PORT
+from figures.plot_scatter import plot
 
 import streamlit as st
-
+from plotly import graph_objects as go
 def run(db: DBConnection):
     st.title("Simulador de Monte Carlo para cotação do Dólar(USD)")
 
@@ -21,8 +22,13 @@ def run(db: DBConnection):
                                 min_value=menor_data,
                                 max_value=maior_data)
     
-    consultar = st.button(label="Consultar dados", on_click=registrar_consulta, 
-                          args=[db, data_inicio, data_fim])
+    consultar = st.button(label="Consultar dados")
+
+    if consultar:
+        co_consulta: int = registrar_consulta(db, data_inicio, data_fim)
+        df = retornar_cotacao(db, data_inicio, data_fim)
+
+        st.plotly_chart(plot(df))
 
     # data_inicio = '2009-01-01'
     # data_fim = '2011-01-01'
