@@ -1,0 +1,11 @@
+GENERAL:
+  update_database: True
+
+DATABASE:
+  url: postgresql://psql:5432/tca
+  user: postgres
+  password: 123
+  dbname: tca
+  host: psql
+  port: 5432
+  driver: org.Postgresql
