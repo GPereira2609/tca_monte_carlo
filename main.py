@@ -2,6 +2,7 @@ from utils.simulator import MonteCarloSimulator as MCSimulator
 from database.db_connection import DBConnection
 from repositories.tb_cotacao import retornar_cotacao, retornar_datas_limite
 from repositories.tb_consulta import registrar_consulta
+from repositories.tb_execucao import registrar_execucao
 from config.settings import DB_NAME, USER, PASSWORD, HOST, PORT
 from figures.plot_scatter import plot
 
@@ -16,6 +17,8 @@ def run(db: DBConnection):
         st.session_state.df_cotacao = None
     if 'visibility' not in st.session_state:
         st.session_state.visibility = True
+    if 'co_consulta' not in st.session_state:
+        st.session_state.co_consulta = None
 
     # Datas limite (por exemplo)
     datas_limite = retornar_datas_limite(db)
@@ -41,6 +44,7 @@ def run(db: DBConnection):
     if consultar:
         st.session_state.df_cotacao = retornar_cotacao(db, data_inicio, data_fim)
         st.session_state.visibility = False
+        st.session_state.co_consulta = registrar_consulta(db, data_inicio, data_fim)[0][0]
 
     # Exibe o gráfico se houver dados armazenados
     if st.session_state.df_cotacao is not None:
@@ -74,7 +78,8 @@ def run(db: DBConnection):
         mc_simulator = MCSimulator(st.session_state.df_cotacao)
 
         p, li, ls = mc_simulator.simular_com_intervalo(cotacao_alvo, n_dias, n_simulacoes)
-        
+        registrar_execucao(db, st.session_state.co_consulta, n_simulacoes,
+                           n_dias, cotacao_alvo, p, li, ls)
 
         with st.container(border=True):
             st.metric(label="""Probabilidade de atingir 
