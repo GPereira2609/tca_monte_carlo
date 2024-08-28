@@ -6,45 +6,83 @@ from config.settings import DB_NAME, USER, PASSWORD, HOST, PORT
 from figures.plot_scatter import plot
 
 import streamlit as st
-from plotly import graph_objects as go
-def run(db: DBConnection):
-    st.title("Simulador de Monte Carlo para cotação do Dólar(USD)")
 
+def run(db: DBConnection):
+    # Inicializando a página
+    st.title("Simulador de Monte Carlo para cotação do Dólar (USD)")
+
+    # Inicializando variáveis de estado
+    if 'df_cotacao' not in st.session_state:
+        st.session_state.df_cotacao = None
+    if 'visibility' not in st.session_state:
+        st.session_state.visibility = True
+
+    # Datas limite (por exemplo)
     datas_limite = retornar_datas_limite(db)
     maior_data = datas_limite['max'][0]
     menor_data = datas_limite['min'][0]
-    
-    data_inicio = st.date_input(label="Selecione a data inicial do recorte",
-                                min_value=menor_data,
-                                max_value=maior_data)
-    
-    data_fim = st.date_input(label="Selecione a data final do recorte",
-                                min_value=menor_data,
-                                max_value=maior_data)
-    
+
+    # Entradas de data
+    data_inicio = st.date_input(
+        label="Selecione a data inicial do recorte",
+        min_value=menor_data,
+        max_value=maior_data
+    )
+
+    data_fim = st.date_input(
+        label="Selecione a data final do recorte",
+        min_value=menor_data,
+        max_value=maior_data
+    )
+
+    # Botão para consulta de dados
     consultar = st.button(label="Consultar dados")
 
     if consultar:
-        co_consulta: int = registrar_consulta(db, data_inicio, data_fim)
-        df = retornar_cotacao(db, data_inicio, data_fim)
+        st.session_state.df_cotacao = retornar_cotacao(db, data_inicio, data_fim)
+        st.session_state.visibility = False
 
-        st.plotly_chart(plot(df))
+    # Exibe o gráfico se houver dados armazenados
+    if st.session_state.df_cotacao is not None:
+        st.plotly_chart(plot(st.session_state.df_cotacao))
 
-    # data_inicio = '2009-01-01'
-    # data_fim = '2011-01-01'
-    # cotacao_alvo = 2.3
-    # n_dias = 365
-    # n_simulacoes = 10000
+    # Input para cotação-alvo e número de dias
+    cotacao_alvo = st.number_input(
+        label="Insira a cotação-alvo desejada",
+        min_value=.1,
+        max_value=10.0,
+        disabled=st.session_state.visibility
+    )
 
-    # df = retornar_cotacao(db, data_inicio, data_fim)
+    n_dias = st.number_input(
+        label="Insira o número de dias para a simulação",
+        min_value=365,
+        max_value=10000,
+        disabled=st.session_state.visibility
+    )
 
-    # mc_simulator = MCSimulator(df)
+    n_simulacoes = st.number_input(
+        label="Insira a quantidade de simulações que devem ser realizadas",
+        min_value=1000,
+        max_value=100000,
+        disabled=st.session_state.visibility
+    )
 
-    # p, li, ls = mc_simulator.simular_com_intervalo(cotacao_alvo, n_dias, n_simulacoes)
-    # print(f"""
-    #     A probabilidade do dólar atingir {cotacao_alvo} em {n_dias} dias é de: {p:.2%},
-    #     com intervalo de confiança de 95%: [{li:.2%}, {ls:.2%}]
-    # """)
+    simular = st.button(label="Simular")
+
+    if simular:
+        mc_simulator = MCSimulator(st.session_state.df_cotacao)
+
+        p, li, ls = mc_simulator.simular_com_intervalo(cotacao_alvo, n_dias, n_simulacoes)
+        
+
+        with st.container(border=True):
+            st.metric(label="""Probabilidade de atingir 
+                        cotação-alvo""", value=f"{p:.2%}")
+        with st.container(border=True):
+            st.metric(label="""Limite inferior do intervalo de confiança de 95%""", value=f"{li:.2%}")
+        with st.container(border=True):
+            st.metric(label="""Limite superior do intervalo de confiança de 95%""", value=f"{ls:.2%}")
 
 if __name__ == '__main__':
     db = DBConnection(
