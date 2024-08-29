@@ -54,3 +54,15 @@ A aplicação deve garantir a precisão e consistência dos resultados através 
 ## Diagramas de sequência
 
 ![Diagrama do fluxo da aplicação](diagrams/diagrama%20de%20sequencia.png)
+
+
+## Execução do projeto
+
+Para executar o projeto, basta clonar o repositório utilizando o comando:
+```
+git clone https://github.com/GPereira2609/tca_monte_carlo
+```
+Em seguida, utilizar o comando:
+```
+docker-compose up
+```
