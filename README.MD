@@ -63,7 +63,7 @@ Para executar o projeto, basta clonar o repositório utilizando o comando:
 git clone https://github.com/GPereira2609/tca_monte_carlo
 ```
 
-Modifique o arquivo config.example.yaml para config.example
+Modifique o arquivo config.example.yaml para config.yaml
 
 Em seguida, utilizar o comando:
 ```
