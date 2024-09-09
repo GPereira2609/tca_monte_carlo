@@ -5,6 +5,7 @@ from repositories.tb_consulta import registrar_consulta
 from repositories.tb_execucao import registrar_execucao
 from config.settings import DB_NAME, USER, PASSWORD, HOST, PORT
 from figures.plot_scatter import plot
+from utils.date import retornar_n_dias, verificar_ordem_das_datas
 
 import streamlit as st
 
@@ -42,6 +43,7 @@ def run(db: DBConnection):
     consultar = st.button(label="Consultar dados")
 
     if consultar:
+        data_inicio, data_fim = verificar_ordem_das_datas(data_inicio, data_fim)
         st.session_state.df_cotacao = retornar_cotacao(db, data_inicio, data_fim)
         st.session_state.visibility = False
         st.session_state.co_consulta = registrar_consulta(db, data_inicio, data_fim)[0][0]
@@ -58,10 +60,9 @@ def run(db: DBConnection):
         disabled=st.session_state.visibility
     )
 
-    n_dias = st.number_input(
+    data_final_simulacao = st.date_input(
         label="Insira o número de dias para a simulação",
-        min_value=365,
-        max_value=10000,
+        min_value=maior_data,
         disabled=st.session_state.visibility
     )
 
@@ -77,6 +78,8 @@ def run(db: DBConnection):
     if simular:
         mc_simulator = MCSimulator(st.session_state.df_cotacao)
 
+        n_dias = retornar_n_dias(data_fim, data_final_simulacao)
+        print(n_dias)
         p, li, ls = mc_simulator.simular_com_intervalo(cotacao_alvo, n_dias, n_simulacoes)
         registrar_execucao(db, st.session_state.co_consulta, n_simulacoes,
                            n_dias, cotacao_alvo, p, li, ls)
