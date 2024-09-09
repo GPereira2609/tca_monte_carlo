@@ -1,4 +1,5 @@
-# Criando Simulações de Monte Carlo: Estratégias de Desenvolvimento e Estudos de Caso
+# MODELAGEM ESTOCÁSTICA DAS FLUTUAÇÕES DÓLAR-REAL COM SIMULAÇÕES DE MONTE CARLO
+
 
 
 ## Resumo
