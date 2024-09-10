@@ -70,3 +70,15 @@ Em seguida, utilizar o comando:
 ```
 docker-compose up
 ```
+
+## Execução de testes
+
+Para executar os testes unitários, é necessário ter a biblioteca pytest instalada. Para isso, utilize o comando:
+```
+pip install pytest
+```
+
+Com a biblioteca instalada, execute o comando:
+```
+pytest
+```
