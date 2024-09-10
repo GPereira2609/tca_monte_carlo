@@ -35,7 +35,7 @@ def run(db: DBConnection):
 
     data_fim = st.date_input(
         label="Selecione a data final do recorte",
-        min_value=menor_data,
+        min_value=data_inicio,
         max_value=maior_data
     )
 
